@@ -113,11 +113,13 @@
   <ItemGroup>
     <ClInclude Include="LightSensor.h" />
     <ClInclude Include="TempPressureSensor.h" />
+    <ClInclude Include="VoltageSensor.h" />
     <ClInclude Include="__vm\.SolarMonitor.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LightSensor.cpp" />
     <ClCompile Include="TempPressureSensor.cpp" />
+    <ClCompile Include="VoltageSensor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,12 +8,14 @@
 //#include "INA219.h"
 //#include "TSL2591.h"
 
+#include "VoltageSensor.h"
 #include "TempPressureSensor.h"
+#include "LightSensor.h"
 #include <SPI.h>
 #include <TFT.h>
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
-#include <Adafruit_INA219.h>
+
 
 
 #define cs  10
@@ -25,29 +27,11 @@
 
 LightSensor* lightSensor;
 TempPressureSensor* tempPressSensor;
-//Adafruit_INA219 ina219;
+VoltageSensor* voltageSensor;
 //
 //TFT tft = TFT(cs, dc, rst);
 //char sensorPrintout[4];
 
-//
-//
-//void SetupTempSensor(Adafruit_BMP085* bmp)
-//{
-//	if (!bmp->begin()) {
-//		Serial.println("Could not find a valid BMP180 sensor, check wiring!");
-//	}
-//	else
-//	{
-//		Serial.println("Found BMP180");
-//	}
-//}
-//
-//void SetupVoltageSensor(Adafruit_INA219* ina219)
-//{
-//	ina219->begin();
-//
-//}
 
 ///////////////////////////////////////////////////////
 void setup() 
@@ -61,9 +45,8 @@ void setup()
 	tempPressSensor = new TempPressureSensor();
 	tempPressSensor->configure();
 
-
-	//SetupVoltageSensor(&ina219);
-	
+	voltageSensor = new VoltageSensor();
+	voltageSensor->configure();
 
 
 	// Setup TFT Screen
@@ -78,8 +61,10 @@ void setup()
 
 void loop()
 {
+	Serial.println("------------------------------------");
 	lightSensor->read();
 	tempPressSensor->read();
+	voltageSensor->read();
 
 	//UpdateDisplay();
 

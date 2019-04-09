@@ -27,12 +27,18 @@
     <ClInclude Include="TempPressureSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VoltageSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LightSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TempPressureSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VoltageSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
