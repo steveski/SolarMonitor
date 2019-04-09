@@ -22,7 +22,7 @@ LightSensor::LightSensor(uint32_t addr)
 	}
 	else
 	{
-		Serial.println("Found TSL2561 light sensor - OO");
+		Serial.println("Found TSL2561 light sensor");
 
 	}
 
