@@ -5,6 +5,7 @@
 
 #include "TempPressureSensor.h"
 
+TempPressureData tempPressureData;
 
 TempPressureSensor::TempPressureSensor(uint32_t addr)
 {
@@ -30,15 +31,17 @@ void TempPressureSensor::configure()
 
 }
 
-void TempPressureSensor::read()
+TempPressureData* TempPressureSensor::read()
 {
-	float temp = bmp.readTemperature();
-	float pa = bmp.readPressure();
-	float alt = bmp.readAltitude();
+	tempPressureData.temperatureC = bmp.readTemperature();
+	tempPressureData.pressurePa = bmp.readPressure();
+	tempPressureData.altitudeM = bmp.readAltitude();
 
-	Serial.print("Temp: "); Serial.print(temp); Serial.println(" C");
-	Serial.print("Pressure: "); Serial.print(pa); Serial.println(" Pa");
-	Serial.print("Altitude: "); Serial.println(alt); //Serial.print(" ");
+#if _DEBUG
+	Serial.print("Temp: "); Serial.print(tempPressureData.temperatureC); Serial.println(" C");
+	Serial.print("Pressure: "); Serial.print(tempPressureData.pressurePa); Serial.println(" Pa");
+	Serial.print("Altitude: "); Serial.println(tempPressureData.altitudeM); //Serial.print(" ");
+#endif
 
 }
 

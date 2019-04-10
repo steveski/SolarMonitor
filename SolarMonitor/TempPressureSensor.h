@@ -11,6 +11,13 @@
 
 #include <Adafruit_BMP085.h>
 
+struct TempPressureData
+{
+	float temperatureC = 0;
+	float pressurePa = 0;
+	float altitudeM = 0;
+};
+
 class TempPressureSensor
 {
 private:
@@ -21,7 +28,7 @@ public:
 	TempPressureSensor(uint32_t addr = -1);
 
 	void configure();
-	void read();
+	TempPressureData* read();
 	void displaySensorDetails();
 
 };

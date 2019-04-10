@@ -8,6 +8,7 @@
 
 #include "LightSensor.h"
 
+LightData lightData;
 
 LightSensor::LightSensor(uint32_t addr)
 {
@@ -66,20 +67,24 @@ void LightSensor::configure()
 		Serial.println("9876x (Max)");
 		break;
 	}
+
+#if _DEBUG
 	Serial.print("Timing:       ");
 	Serial.print((tsl.getTiming() + 1) * 100, DEC);
 	Serial.println(" ms");
 	Serial.println("------------------------------------");
 	Serial.println("");
+#endif
 
 }
 
-void LightSensor::read()
+LightData* LightSensor::read()
 {
 	/* Get a new sensor event */
 	sensors_event_t event;
 	tsl.getEvent(&event);
 
+#if _DEBUG
 	/* Display the results (light is measured in lux) */
 	Serial.print("[ "); Serial.print(event.timestamp); Serial.print(" ms ] ");
 	if ((event.light == 0) |
@@ -95,6 +100,11 @@ void LightSensor::read()
 	{
 		Serial.print(event.light); Serial.println(" lux");
 	}
+
+#endif
+
+	lightData.lux = event.light;
+
 }
 
 
@@ -106,8 +116,11 @@ void LightSensor::read()
 /**************************************************************************/
 void LightSensor::displaySensorDetails()
 {
+#if _DEBUG
 	sensor_t sensor;
 	tsl.getSensor(&sensor);
+
+
 	Serial.println("------------------------------------");
 	Serial.print("Sensor:       "); Serial.println(sensor.name);
 	Serial.print("Driver Ver:   "); Serial.println(sensor.version);
@@ -117,5 +130,5 @@ void LightSensor::displaySensorDetails()
 	Serial.print("Resolution:   "); Serial.print(sensor.resolution); Serial.println(" lux");
 	Serial.println("------------------------------------");
 	Serial.println("");
-	delay(500);
+#endif
 }

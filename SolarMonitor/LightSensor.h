@@ -11,6 +11,11 @@
 
 #include <Adafruit_TSL2591.h>
 
+struct LightData
+{
+	float lux;
+};
+
 class LightSensor
 {
 private:
@@ -21,7 +26,7 @@ public:
 	LightSensor(uint32_t addr = -1);
 
 	void configure();
-	void read();
+	LightData* read();
 	void displaySensorDetails();
 
 };

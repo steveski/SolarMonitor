@@ -4,9 +4,6 @@
  Author:  steve
 */
 
-//#include "BMP180.h"
-//#include "INA219.h"
-//#include "TSL2591.h"
 
 #include "VoltageSensor.h"
 #include "TempPressureSensor.h"
@@ -16,27 +13,35 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 
-
-
 #define cs  10
 #define dc  9
 #define rst 8
-
-
-#include "LightSensor.h"
+//TFT tft = TFT(cs, dc, rst);
 
 LightSensor* lightSensor;
 TempPressureSensor* tempPressSensor;
 VoltageSensor* voltageSensor;
-//
-//TFT tft = TFT(cs, dc, rst);
-//char sensorPrintout[4];
+
+
+struct DisplayData
+{
+	String lineStrings[2];
+	int lineFontSize[2];
+
+} disp;
+
+void UpdateDisplay(DisplayData* dispData)
+{	
+
+}
 
 
 ///////////////////////////////////////////////////////
 void setup() 
 {
+#if _DEBUG
 	Serial.begin(9600);
+#endif
 
 	lightSensor = new LightSensor();
 	lightSensor->displaySensorDetails();
@@ -52,95 +57,73 @@ void setup()
 	// Setup TFT Screen
 	//tft.begin();
 	//tft.background(0, 0, 0);
-
 	//tft.stroke(255, 255, 255);
-	//tft.setTextSize(2);
 
 
 }
 
 void loop()
 {
+#if _DEBUG
 	Serial.println("------------------------------------");
-	lightSensor->read();
-	tempPressSensor->read();
-	voltageSensor->read();
+#endif
 
-	//UpdateDisplay();
+	LightData* lightData = lightSensor->read();
+	TempPressureData* tempPressData = tempPressSensor->read();
+	VoltageData* voltData = voltageSensor->read();
 
-	Serial.println();
 	
-	delay(5000);
+	char buffer[16];
+	disp.lineStrings[0] = String("Light");
+	disp.lineFontSize[0] = 1;
+	disp.lineStrings[1] = String(sprintf(buffer, "%f ", lightData->lux));
+	disp.lineFontSize[1] = 2;
+	//UpdateDisplay(&disp);
+	Serial.println(dispData->lineStrings[0]);
+	delay(1500);
+
+	disp.lineStrings[0] = String("Temperature");
+	disp.lineFontSize[0] = 1;
+	disp.lineStrings[1] = String(sprintf(buffer, "%f% cC", tempPressData->temperatureC, (char)223));
+	disp.lineFontSize[1] = 2;
+	//UpdateDisplay(&disp);
+	delay(1500);
+
+	disp.lineStrings[0] = String("Pressure");
+	disp.lineFontSize[0] = 1;
+	disp.lineStrings[1] = String(sprintf(buffer, "%f Pa", tempPressData->pressurePa));
+	disp.lineFontSize[1] = 2;
+	//UpdateDisplay(&disp);
+	delay(1500);
+
+	disp.lineStrings[0] = String("Altitude");
+	disp.lineFontSize[0] = 1;
+	disp.lineStrings[1] = String(sprintf(buffer, "%f m", tempPressData->altitudeM));
+	disp.lineFontSize[1] = 2;
+	//UpdateDisplay(&disp);
+	delay(1500);
+
+	disp.lineStrings[0] = String("Voltage");
+	disp.lineFontSize[0] = 1;
+	disp.lineStrings[1] = String(sprintf(buffer, "%f mV", voltData->shuntVoltage));
+	disp.lineFontSize[1] = 2;
+	//UpdateDisplay(&disp);
+	delay(1500);
+
+	disp.lineStrings[0] = String("Amps");
+	disp.lineFontSize[0] = 1;
+	disp.lineStrings[1] = String(sprintf(buffer, "%f mA", voltData->currentMa));
+	disp.lineFontSize[1] = 2;
+	//UpdateDisplay(&disp);
+	delay(1500);
+
+
+#if _DEBUG
+	Serial.println();
+#endif
+
+	delay(1000);
 
 }
 
 
-
-//
-//
-//char lineBuffer[20];
-//
-//struct Environment
-//{
-//	char temperature[10];
-//	char pressure[10];
-//	char lumens[10];
-//
-//} env;
-//
-//
-//
-//void GetVoltage()
-//{
-//	float shuntvoltage = 0;
-//	float busvoltage = 0;
-//	float current_mA = 0;
-//	float loadvoltage = 0;
-//	float power_mW = 0;
-//
-//	shuntvoltage = ina219.getShuntVoltage_mV();
-//	busvoltage = ina219.getBusVoltage_V();
-//	current_mA = ina219.getCurrent_mA();
-//	power_mW = ina219.getPower_mW();
-//	loadvoltage = busvoltage + (shuntvoltage / 1000);
-//
-//	Serial.print("Bus Voltage:   "); Serial.print(busvoltage); Serial.println(" V");
-//	Serial.print("Shunt Voltage: "); Serial.print(shuntvoltage); Serial.println(" mV");
-//	Serial.print("Load Voltage:  "); Serial.print(loadvoltage); Serial.println(" V");
-//	Serial.print("Current:       "); Serial.print(current_mA); Serial.println(" mA");
-//	Serial.print("Power:         "); Serial.print(power_mW); Serial.println(" mW");
-//	Serial.println("");
-//}
-//
-//
-//
-//void GetTempAndPressure()
-//{
-//	String(bmp.readTemperature(), 1).toCharArray(env.temperature, 10);
-//	String(bmp.readPressure()).toCharArray(env.pressure, 10);
-//	//env.lumens = String(92).c_str();
-//
-//	Serial.print(env.temperature);
-//	Serial.println(" *C");
-//	Serial.print(env.pressure);
-//	Serial.println(" Pa");
-//
-//	//tempStr.toCharArray(env.temperature, 3);
-//	//pressStr.toCharArray(env.pressure, 6);
-//	//lumensStr.toCharArray(env.lumens, 6);
-//
-//}
-
-/*
-void UpdateDisplay()
-{
-  sprintf(lineBuffer, "%s %cC", env.temperature, (char)223);
-  tft.text(lineBuffer, 10, 30);
-
-  sprintf(lineBuffer, "%s Pa", env.pressure);
-  tft.text(lineBuffer, 10, 55);
-
-  sprintf(lineBuffer, "%s lux", env.lumens);
-  tft.text(lineBuffer, 10, 80);
-}
-*/
